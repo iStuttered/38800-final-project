@@ -129,10 +129,6 @@ public class OrderProcessingController {
 
 				Item selected = (Item) PotentialItems.getValue();
 
-				if(quantity < 1) {
-					return;
-				}
-
 				if(address == null || address.length() < 1) {
 					return;
 				}

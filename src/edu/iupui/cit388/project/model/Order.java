@@ -20,8 +20,43 @@ public abstract class Order implements ReceiptGenerator {
 		this.orderLineList = orderLines;
 	}
 	
-	public void addOrderLine(OrderLine orderLine) {
-		this.orderLineList.add(orderLine);
+	public void addOrderLine(OrderLine new_order_line) {
+		
+		boolean item_already_exists = false;
+		boolean item_will_be_empty = false;
+
+		int order_line_index = 0;
+
+		for (OrderLine line : orderLineList) {
+
+			if (new_order_line.getItemDescription().equals(line.getItemDescription())) {
+				item_already_exists = true;
+				break;
+			}
+
+			order_line_index += 1;
+		}
+
+		if(item_already_exists) {
+
+			OrderLine current_order_line = this.orderLineList.get(order_line_index);
+
+			item_will_be_empty = new_order_line.getQuantity() + current_order_line.getQuantity() <= 0;
+
+			if(item_will_be_empty) {
+
+				this.orderLineList.remove(order_line_index);
+
+			} else {
+				current_order_line.setQuantity(new_order_line.getQuantity() + current_order_line.getQuantity());
+
+				this.orderLineList.set(order_line_index, current_order_line);
+			}
+
+		} else {
+
+			this.orderLineList.add(new_order_line);
+		}
 	}
 
 	public void removeOrderLineByItemDescription(String item) {
